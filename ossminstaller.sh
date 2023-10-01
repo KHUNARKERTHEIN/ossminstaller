@@ -22,11 +22,14 @@ read -s
 
 # Check system for updates and install required programs
 sudo apt update && sudo apt dist-upgrade -y
+sudo apt autoremove
+sudo apt upgrade -y
 sudo apt install unzip -y
 
 # Install LAMP packages and create UFW Firewall rules
 sudo apt install apache2 -y
-sudo ufw allow in "Apache full"
+#sudo ufw allow in "Apache full"
+sudo ufw allow 'Apache Full'
 sudo ufw allow 22/tcp
 sudo ufw allow 53/udp
 sudo ufw allow 53,80,443,25,587,465,143,993/tcp
@@ -36,15 +39,26 @@ sudo ufw enable
 sudo apache2ctl -t
 sudo systemctl enable ufw
 sudo systemctl reload apache2
-sudo apt install software-properties-common && sudo add-apt-repository ppa:ondrej/php -y
+
+#Install PHP
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:ondrej/php -y
+sudo add-apt-repository ppa:ondrej/apache2
 sudo apt update
 sudo apt install php8.2-cli
 sudo apt install php8.2 libapache2-mod-php8.2 php8.2-mysql php8.2-soap php8.2-bcmath php8.2-xml php8.2-mbstring php8.2-gd php8.2-common php8.2-cli php8.2-curl php8.2-intl php8.2-dev php8.2-zip zip unzip -y
 sudo apt install php8.2-{bcmath,common,xml,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,xsl,cgi} -y
 sudo apt-get install php8.2-phpdbg
 sudo apt-get install libphp8.2-embed
+sudo apt install php8.2-imagick
+sudo apt install php8.2-sqlite3
+sudo apt install php8.2-imap
+sudo apache2ctl -t
 
 #sudo apt install php8.2-fpm
+#sudo systemctl enable php8.2-fpm
+#sudo systemctl status php8.2-fpm
+#sudo systemctl restart php8.2-fpm
 #sudo apt-get remove php8.*
 #sudo apt-get purge php8.*
 #sudo apt-get autoclean
@@ -54,10 +68,14 @@ sudo apt-get install libphp8.2-embed
 #sudo systemctl restart apache2
 #sudo a2enconf php8.2-fpm
 #sudo systemctl reload apache2
-
+#sudo nmap ....
+#sudo netstat -lnpu
+#sudo ufw status verbose
+sudo systemctl reload apache2
 #IonCube is not available on Ubuntu 22.04 base repository,The following command below to download the latest
 sudo apt update && sudo apt upgrade -y
 sudo apt autoremove
+#Install PHP Ioncube
 sudo apt install wget apt-transport-https gnupg2 software-properties-common
 sudo wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
 sudo tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
@@ -105,9 +123,12 @@ clear
 #
 
 #install Mariadb
-
-sudo apt install mariadb-server -y
+sudo apt install mariadb-server mariadb-client -y
+sudo systemctl start mariadb
 sudo systemctl enable mariadb
+
+#sudo apt install mariadb-server -y
+#systemctl status mariadb.service
 
 # Clear screen and update user
 clear
@@ -138,12 +159,9 @@ clear
 
 #>ls /run/php/
 # sudo systemctl enable mariadb
-# sudo systemctl enable php8.2-fpm
 # sudo systemctl enable apache2
 # sudo systemctl restart apache2
-# sudo systemctl restart php8.2-fpm
 # sudo systemctl restart mariadb
-# sudo systemctl status php8.2-fpm
 # sudo systemctl status mariadb
 # sudo systemctl status apache2
 
@@ -178,14 +196,23 @@ sudo systemctl reload apache2
 #systemctl status php*-fpm.service
 #sudo a2dissite 000-default.conf
 
-# Change directory and install OSSM
-
+# Change the directory and install OSSM
+#cd /var/www/public_html
 DOCROOT=/var/www/public_html/
 cd $DOCROOT
-sudo wget https://github.com/KHUNARKERTHEIN/ossm/archive/refs/heads/master.zip
-sudo unzip master.zip
-sudo mv ossm-master/* ossm/
-sudo rm -rf ossm-master master.zip
+sudo wget https://github.com/KHUNARKERTHEIN/favicon/archive/refs/heads/main.zip
+sudo unzip main.zip
+sudo mv favicon-main/* ossm/
+sudo rm -rf favicon-main main.zip
+sudo service apache2 restart
+
+#DOCROOT=/var/www/public_html/
+#cd $DOCROOT
+#sudo wget https://github.com/KHUNARKERTHEIN/ossm/archive/refs/heads/master.zip
+#sudo unzip master.zip
+#sudo mv ossm-master/* ossm/
+#sudo rm -rf ossm-master master.zip
+#sudo service apache2 restart
 
 # Set correct ownership and permissions
 
@@ -207,6 +234,10 @@ sudo apt update
 sudo apt install ffmpeg -y
 sudo service apache2 restart
 
+sudo apt install openssl -y
+sudo apt install nmap -y
+sudo apt install net-tools -y
+
 #sudo nano /etc/hosts
 #>127.0.0.1 localhost burma.trade www.burma.trade
 #>34.142.231.242 burma.trade www.burma.trade
@@ -225,7 +256,7 @@ sudo service apache2 restart
 
 # Install phpmyadmin
 sudo apt install phpmyadmin -y
-
+sudo apache2ctl configtest && sudo systemctl restart apache2
 #fix:phpmyadmin-deprecation-notice error /usr/share/phpmyadmin/config.inc.php or
 #>sudo nano /etc/phpmyadmin/config.inc.php
 #should technically correspond to this: at the bottom;
