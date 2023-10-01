@@ -200,10 +200,10 @@ sudo systemctl reload apache2
 #cd /var/www/public_html
 DOCROOT=/var/www/public_html/
 cd $DOCROOT
-sudo wget https://github.com/KHUNARKERTHEIN/favicon/archive/refs/heads/main.zip
+sudo wget https://github.com/KHUNARKERTHEIN/osm/archive/refs/heads/main.zip
 sudo unzip main.zip
-sudo mv favicon-main/* ossm/
-sudo rm -rf favicon-main main.zip
+sudo mv osm-main/* ossm/
+sudo rm -rf osm-main main.zip
 sudo service apache2 restart
 
 #DOCROOT=/var/www/public_html/
