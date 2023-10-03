@@ -166,9 +166,10 @@ clear
 # sudo systemctl status apache2
 
 # Create directories for OSSM
-DOCROOT=/var/www/public_html/
-sudo mkdir $DOCROOT/ossm
-sudo mkdir $DOCROOT/ossn_data
+DOCROOT=/var/www
+sudo mkdir $DOCROOT/public_html
+sudo mkdir $DOCROOT/public_html/ossm
+sudo mkdir $DOCROOT/public_html/ossn_data
 #sudo rm -rf $DOCROOT/html
 
 # Backup old and create new configuration file for Apache2
