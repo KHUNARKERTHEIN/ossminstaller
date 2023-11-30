@@ -204,8 +204,8 @@ cd $DOCROOT
 #sudo wget https://github.com/KHUNARKERTHEIN/ossmn/archive/refs/heads/main.zip
 sudo wget https://github.com/AUNGSUBWAY/myanmar/archive/refs/heads/main.zip
 sudo unzip main.zip
-sudo mv ossmn-main/* ossm/
-sudo rm -rf ossmn-main main.zip
+sudo mv myanmar-main/* ossm/
+sudo rm -rf myanmar-main main.zip
 sudo service apache2 restart
 
 #DOCROOT=/var/www/public_html/
@@ -317,15 +317,17 @@ MariaDB [(none)]> EXIT;
 sudo nano /etc/phpmyadmin/config.inc.php
 should technically correspond to this: at the bottom;
 $cfg['SendErrorReports'] = 'never';
-systemctl restart apache2
+sudo systemctl restart apache2
 #fix:phpmyadmin root log in error
-systemctl status mysql.service
+sudo systemctl status mysql.service
+
 sudo mysql
 mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1';
 Exit; or \q and now run
 systemctl restart apache2
 login:ip/phpmyadmin
 root and pass
+
 #choose PHP as the default.
 sudo update-alternatives --config php
 sudo systemctl restart apache2
@@ -335,14 +337,14 @@ systemctl status php*-fpm.service
 ls  -1 /etc/php/8.2/fpm
 sudo nano /etc/hosts
 127.0.0.1 localhost burma.trade www.burma.trade
-35.197.157.247 burma.trade www.burma.trade
+34.16.21.71 burma.trade www.burma.trade
 #Save the hosts file. Otherwise, you will get an error "MOD_REWRITE REQUIRED".
 sudo systemctl restart apache2
 
 #Open an Apache config file to set the Global ServerName 
 sudo nano /etc/apache2/apache2.conf
 #Add this line at the end of the file, then save and exit your server IP
-ServerName 35.197.157.247
+ServerName 34.16.21.71
 Check for any syntax errors we may have introduced
 sudo apache2ctl configtest
 Enable Apache rewrite (this resolves most post-installation 404 errors) 
@@ -361,7 +363,7 @@ sudo ufw logging on
 sudo ufw logging medium
 sudo ufw enable
 sudo apt install nmap -y
-sudo nmap 35.197.157.247
+sudo nmap 34.16.21.71
 sudo apt install net-tools
 sudo netstat -lnpu
 sudo ufw status verbose
@@ -389,6 +391,25 @@ $ sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 128M/" /etc/php/
 $ sudo sed -i "s/zlib.output_compression = .*/zlib.output_compression = on/" /etc/php/8.2/fpm/php.ini
 $ sudo sed -i "s/max_execution_time = .*/max_execution_time = 18000/" /etc/php/8.2/fpm/php.ini
 $ sudo sed -i "s/date.timezone = .*/date.timezone = Asia/Yangon/" /etc/php/8.2/fpm/php.ini
+###
+$ sudo sed -i "s/memory_limit = .*/memory_limit = 4G/" /etc/php/8.2/cli/php.ini
+###
+
+sudo nano /etc/php/8.2/apache2/php.ini
+
+sudo sed -i "s/memory_limit = .*/memory_limit = 4G/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 256M/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/post_max_size = .*/post_max_size = 256M/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/zlib.output_compression = .*/zlib.output_compression = on/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/max_execution_time = .*/max_execution_time = 36000/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/max_input_time = .*/max_input_time = 1800/" /etc/php/8.2/apache2/php.ini
+### and uncomment ;
+sudo sed -i "s/short_open_tag = .*/short_open_tag = On/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/max_input_vars = .*/max_input_vars = 10000/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/realpath_cache_size = .*/realpath_cache_size = 10M/" /etc/php/8.2/apache2/php.ini   
+sudo sed -i "s/realpath_cache_ttl = .*/realpath_cache_ttl = 7200/" /etc/php/8.2/apache2/php.ini
+
+date.timezone = Asia/Yangon
 
 ###
 php --ini | grep "Loaded Configuration File"
@@ -416,7 +437,8 @@ fix: ===========phpmyadmin root log in error:
 systemctl status mysql.service
 sudo mysql
 mysql> 
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'; or admin@:
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'; 
+## or admin@:
 Exit; or \q and now run:systemctl restart apache2
 login:ip/phpmyadmin:root=pw:
 sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'"
@@ -436,6 +458,7 @@ You will see something similar to this:
 ioncube_loader_lin_7.0.so     ioncube_loader_lin_8.1.so
 Step 3. PHP Configuration File.
 Once you have downloaded the IonCube Loader, you need to move it to the PHP extension directory.
+
 php -i | grep extension_dir
 You should see the following output:
 extension_dir => /usr/lib/php/20220829 => /usr/lib/php/20220829
@@ -451,15 +474,18 @@ If you have a different version of PHP installed, the location of the file will 
 Now open your php.ini file using the following command below:
 #sudo nano /etc/php/8.2/cli/php.ini
 zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
-#sudo nano /etc/php/8.2/fpm/php.ini
-zend_extension=/usr/lib/php/20210902/ioncube_loader_lin_8.2.so
+
 #sudo nano /etc/php/8.2/apache2/php.ini
-zend_extension=/usr/lib/php/20210902/ioncube_loader_lin_8.2.so
+zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
 Add the following line at the end of the php.ini file
-zend_extension=/usr/lib/php/20210902/ioncube_loader_lin_8.2.so
+
+#sudo nano /etc/php/8.2/fpm/php.ini
+zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
 sudo service php8.2-fpm restart
 sudo systemctl restart php8.2-fpm
+
 sudo systemctl restart apache2
+
 Finally, check the installed PHP version.
 php -v
 
@@ -558,5 +584,6 @@ sudo systemctl reload apache2
 
 echo "That's it! We're done. Open your browser and navigate"
 echo "to http://yourserver/ and finish setup"
+# Change http to https in # cd /var/www/public_html/ossm/configurations$ sudo nano ossn.config.site.php
 -"
 echo ""
