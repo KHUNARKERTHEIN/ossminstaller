@@ -373,6 +373,16 @@ sudo systemctl reload apache2
 #how-to-install-and-use-ffmpeg-in-ubuntu/
 sudo apt update
 sudo apt install ffmpeg -y
+
+#if your ffmpeg full path is /usr/local/bin/ffmpeg then you need to save following in settings /usr/local/bin/
+#ffmpeg: /usr/bin/ffmpeg /usr/share/ffmpeg /usr/share/man/man1/ffmpeg.1.gz
+
+whereis ffmpeg
+#in ossm videos= /usr/bin/
+sudo crontab -e
+#Then add the following line at the bottom.
+*/5 * * * * /usr/bin/php8.2 /var/www/public_html/ossm/components/Videos/cron.php > /dev/null 2>&1
+
 #verify if everything installed correctly, including all the dependency libraries, with the following command.
 ffmpeg -version | ffmpeg -encoders | ffmpeg -decoders
 #add domain
