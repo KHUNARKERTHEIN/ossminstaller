@@ -201,7 +201,8 @@ sudo systemctl reload apache2
 #cd /var/www/public_html
 DOCROOT=/var/www/public_html/
 cd $DOCROOT
-sudo wget https://github.com/KHUNARKERTHEIN/ossmn/archive/refs/heads/main.zip
+#sudo wget https://github.com/KHUNARKERTHEIN/ossmn/archive/refs/heads/main.zip
+sudo wget https://github.com/AUNGSUBWAY/myanmar/archive/refs/heads/main.zip
 sudo unzip main.zip
 sudo mv ossmn-main/* ossm/
 sudo rm -rf ossmn-main main.zip
